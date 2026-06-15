@@ -1,0 +1,92 @@
+{{define "dashboard"}}{{template "base" .}}{{end}}
+{{define "page_title"}}
+<div>
+  <p class="eyebrow">overview</p>
+  <h1>Dashboard</h1>
+</div>
+{{end}}
+{{define "page_actions"}}
+<a class="btn primary" href="/editor">+ new draft</a>
+<a class="btn" href="/deploy">preview / export</a>
+{{end}}
+{{define "content"}}
+<section class="page-shell dashboard-shell">
+  {{template "page_header" .}}
+
+  <section class="metric-grid" aria-label="site overview">
+    <a class="metric-card" href="/content"><span>{{.Data.Stats.Total}}</span><small>documents</small></a>
+    <a class="metric-card" href="/content?type=post"><span>{{.Data.Stats.Public}}</span><small>posts</small></a>
+    <a class="metric-card" href="/content?type=draft"><span>{{.Data.Stats.Drafts}}</span><small>drafts</small></a>
+    <a class="metric-card" href="/assets"><span>{{.Data.Stats.Assets}}</span><small>assets</small></a>
+  </section>
+
+  <section class="dashboard-grid">
+    <div class="panel continue-panel">
+      <div class="panel-head"><strong class="panel-title">continue writing</strong><a href="/content" class="subtle-link cyan-link">open content →</a></div>
+      <div class="doc-list continue-list">
+        {{range .Data.Recent}}
+        <div class="doc-row continue-row">
+          <div class="continue-main">
+            <div class="continue-meta">
+              <span class="type-badge type-{{.Type}}">{{.Type}}</span>
+              <span class="status-pill {{.Status}}">{{.Status}}</span>
+              {{if .Tags}}<span class="continue-tags">{{range $i, $t := .Tags}}{{if $i}}, {{end}}{{$t}}{{end}}</span>{{end}}
+            </div>
+            <a class="continue-title" href="/editor?slug={{.Slug}}&from=/">{{.Title}}</a>
+          </div>
+          <div class="continue-side">
+            <span class="continue-modified">{{.ModifiedLabel}}</span>
+            <a class="row-act continue-open" href="/editor?slug={{.Slug}}&from=/">open</a>
+          </div>
+        </div>
+        {{else}}
+        <div class="empty small">no documents yet — <a href="/editor">start a draft</a></div>
+        {{end}}
+      </div>
+    </div>
+
+    <div class="panel composition-card">
+      <div class="panel-head"><strong class="panel-title">content mix</strong><span class="panel-sub">{{.Data.Stats.Total}} total</span></div>
+      <div class="composition-body">
+        {{if gt .Data.Stats.Total 0}}
+        <div class="donut-wrap">
+          <svg class="donut" viewBox="0 0 160 160" role="img" aria-label="content mix chart">
+            <circle class="donut-track" cx="80" cy="80" r="60" fill="none" stroke-width="18"></circle>
+            {{range .Data.Charts.ContentState}}{{if gt .Value 0}}<circle class="donut-slice ds-{{.ColorIdx}}" cx="80" cy="80" r="60" fill="none" stroke-width="18" stroke-linecap="round" stroke-dasharray="{{.DashArray}}" stroke-dashoffset="{{.DashOff}}" transform="rotate(-90 80 80)"></circle>{{end}}{{end}}
+            <text x="80" y="76" class="donut-center-n">{{.Data.Stats.Total}}</text>
+            <text x="80" y="96" class="donut-center-l">docs</text>
+          </svg>
+        </div>
+        <ul class="chart-legend">
+          {{range .Data.Charts.ContentState}}
+          <li><a href="{{.URL}}"><span class="legend-dot ds-{{.ColorIdx}}"></span><span class="legend-label">{{.Label}}</span><span class="legend-val">{{.Value}}</span></a></li>
+          {{end}}
+        </ul>
+        {{else}}
+        <p class="empty small">no content yet</p>
+        {{end}}
+      </div>
+    </div>
+  </section>
+
+  <section class="panel workspace-card wide-card">
+    <div class="panel-head"><strong class="panel-title">workspace snapshot</strong><span class="panel-sub">project totals</span></div>
+    <div class="workspace-grid">
+      <div class="workspace-bars" aria-label="workspace totals">
+        {{range .Data.Charts.WorkspaceTotals}}
+        <a class="workspace-bar-row" href="{{.URL}}">
+          <span class="workspace-label">{{.Label}}</span>
+          <span class="workspace-track"><span class="workspace-fill" style="width:{{.Pct}}%"></span></span>
+          <span class="workspace-value">{{.Value}}</span>
+        </a>
+        {{end}}
+      </div>
+      <div class="workspace-status">
+        <div><span class="status-label">theme</span><strong>{{.Data.Publishing.Theme}}</strong></div>
+        <div><span class="status-label">local port</span><strong>{{.Data.Publishing.Port}}</strong></div>
+        <div><span class="status-label">site state</span><strong>{{.Data.Publishing.SiteState}}</strong></div>
+      </div>
+    </div>
+  </section>
+</section>
+{{end}}

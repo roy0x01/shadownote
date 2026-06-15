@@ -1,0 +1,39 @@
+{{define "post"}}{{template "base" .}}{{end}}
+{{define "content"}}
+<article class="post post-layout" data-theme-post="true"{{if not .TOC}} data-no-toc="true"{{end}}>
+  {{if .TOC}}
+  <aside class="toc-sidebar" aria-label="Table of contents">
+    <details class="toc" open>
+      <summary>On this page</summary>
+      <ul>
+        {{range .TOC}}<li class="toc-l{{.Level}}"><a href="#{{.ID}}">{{.Text}}</a></li>{{end}}
+      </ul>
+    </details>
+  </aside>
+  {{end}}
+
+  <div class="post-main">
+    <header class="post-header">
+      <div class="post-meta post-byline">
+        {{if .Site.Author}}<span>By {{.Site.Author}}</span>{{end}}
+        {{if and .Site.Author .Post.DateString}}<span class="dot" aria-hidden="true">·</span>{{end}}
+        {{if .Post.DateString}}<time datetime="{{.Post.Date.Format "2006-01-02"}}">{{.Post.DateString}}</time>{{end}}
+      </div>
+      <h1>{{.Post.Title}}</h1>
+      {{if .Post.Summary}}<p class="dek">{{.Post.Summary}}</p>{{end}}
+      {{if .Post.Tags}}
+      <div class="post-tags">
+        {{range .Post.Tags}}<a href="{{$.Site.BaseURL}}tags/{{. | urlize}}/" class="tag">#{{.}}</a>{{end}}
+      </div>
+      {{end}}
+    </header>
+
+    <div class="post-content">
+      {{.Body}}
+    </div>
+    <footer class="post-footer">
+      <a href="{{.Site.BaseURL}}" class="back">← All posts</a>
+    </footer>
+  </div>
+</article>
+{{end}}

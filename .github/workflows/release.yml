@@ -1,0 +1,86 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to publish, for example v1.0.0
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release-linux-amd64:
+    name: Release Linux amd64
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: shadownote
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Resolve tag
+        id: ref
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            tag="${{ inputs.tag }}"
+          fi
+          case "$tag" in
+            v*.*.*) ;;
+            *) echo "release tag must look like v1.0.0" >&2; exit 1 ;;
+          esac
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.ref.outputs.tag }}
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y gcc
+
+      - name: Check tag matches binary version
+        run: |
+          tag="${{ steps.ref.outputs.tag }}"
+          version="${tag#v}"
+          source_version=$(sed -n 's/.*Version = "\([^"]*\)".*/\1/p' internal/meta/meta.go | head -1)
+          if [ "$version" != "$source_version" ]; then
+            echo "tag $tag does not match internal/meta version $source_version" >&2
+            exit 1
+          fi
+
+      - name: Verify
+        run: |
+          go mod download
+          go vet ./...
+          go test ./...
+
+      - name: Build release artifact
+        run: |
+          tag="${{ steps.ref.outputs.tag }}"
+          artifact="${APP_NAME}_${tag}_linux_amd64"
+          mkdir -p "dist/$artifact"
+          CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags fts5 -trimpath -ldflags='-s -w' -o "dist/$artifact/$APP_NAME" .
+          cp README.md LICENSE "dist/$artifact/"
+          tar -C dist -czf "dist/$artifact.tar.gz" "$artifact"
+          (cd dist && sha256sum *.tar.gz > checksums.txt)
+
+      - name: Publish GitHub release
+        run: |
+          tag="${{ steps.ref.outputs.tag }}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" dist/*.tar.gz dist/checksums.txt --clobber
+          else
+            gh release create "$tag" dist/*.tar.gz dist/checksums.txt --title "$tag" --generate-notes
+          fi

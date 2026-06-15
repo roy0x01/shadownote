@@ -1,0 +1,20 @@
+{{define "base"}}<!DOCTYPE html>
+<html lang="en">
+<head>
+{{template "document_head" .}}
+</head>
+<body>
+<a href="#main" class="skip-link">skip to content</a>
+<div class="app-shell nav-open" id="app-shell">
+  {{template "primary_nav" .}}
+  <section class="workspace">
+    {{template "workspace_controls" .}}
+    <main class="page" id="main" tabindex="-1">
+      {{template "content" .}}
+    </main>
+  </section>
+</div>
+<script src="/static/js/app.js"></script>
+{{if .Script}}<script src="/static/js/{{.Script}}"></script>{{end}}
+</body>
+</html>{{end}}

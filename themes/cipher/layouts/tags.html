@@ -1,0 +1,21 @@
+{{define "tags"}}{{template "base" .}}{{end}}
+{{define "content"}}
+<section class="archive-hero tags-hero">
+  <p class="eyebrow">Topics</p>
+  <h1 class="page-title">Tags</h1>
+  <p class="page-subtitle">Explore articles by topic, category, or project label.</p>
+</section>
+<div class="tag-cloud">
+  {{range .Tags}}
+  <a href="{{$.Site.BaseURL}}tags/{{.Name | urlize}}/" class="tag-link">
+    <span>#{{.Name}}</span>
+    <span class="count">{{.Count}}</span>
+  </a>
+  {{else}}
+  <div class="empty-state">
+    <p class="empty-title">No tags yet.</p>
+    <p class="empty">Add tags in post frontmatter and rebuild the site.</p>
+  </div>
+  {{end}}
+</div>
+{{end}}

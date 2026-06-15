@@ -1,0 +1,67 @@
+{{define "deploy"}}{{template "base" .}}{{end}}
+{{define "page_title"}}
+<div>
+  <p class="eyebrow">preview & export</p>
+  <h1>Preview & Export</h1>
+</div>
+{{end}}
+{{define "page_actions"}}{{end}}
+{{define "content"}}
+<section class="page-shell deploy-shell" data-ready="1">
+  {{template "page_header" .}}
+
+  {{if .Data.Result}}<div class="banner ok" role="status">✓ {{.Data.Result}}</div>{{end}}
+  {{if .Data.ResultErr}}<div class="banner err" role="alert">✗ {{.Data.ResultErr}}</div>{{end}}
+
+  <form method="POST" action="/deploy" class="deploy-form" data-deploy-form>
+    <div class="deploy-step deploy-mode-step">
+      <div class="deploy-step-head"><span class="step-n">1</span><h2>Action</h2></div>
+      <div class="mode-grid" role="radiogroup" aria-label="preview or export action">
+        <label class="deploy-mode" data-mode-card>
+          <input type="radio" name="action" value="local" required>
+          <span class="mode-mark">▰</span>
+          <span class="mode-copy"><strong>Local preview</strong><small>Build the selected theme and serve it from the configured local port.</small></span>
+        </label>
+        <label class="deploy-mode" data-mode-card>
+          <input type="radio" name="action" value="export" required>
+          <span class="mode-mark">⇩</span>
+          <span class="mode-copy"><strong>Local export</strong><small>Build a portable tar.gz archive of the selected themed site.</small></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="deploy-step deploy-theme-step" data-theme-step>
+      <div class="deploy-step-head"><span class="step-n">2</span><h2>Theme</h2></div>
+      {{if .Data.Themes}}
+      <div class="theme-grid" role="radiogroup" aria-label="theme">
+        {{range .Data.Themes}}
+        <label class="theme-pick {{if .Selected}}is-selected{{end}} {{if not .Valid}}is-invalid{{end}}">
+          <input type="radio" name="theme" value="{{.Name}}" required {{if .Selected}}checked{{end}} {{if not .Valid}}disabled{{end}}>
+          <span class="theme-shot">{{if .Screenshot}}<img src="{{.Screenshot}}" alt="{{.Name}} preview" loading="lazy">{{end}}</span>
+          <span class="theme-meta">
+            <span class="theme-name">{{.Name}}{{if .Selected}} <span class="theme-current">current</span>{{end}}{{if not .Valid}} <span class="theme-current warn">invalid</span>{{end}}</span>
+            <span class="theme-desc">{{.Description}}</span>
+          </span>
+        </label>
+        {{end}}
+      </div>
+      {{else}}
+      <p class="deploy-hint warn">No themes found in the themes directory.</p>
+      {{end}}
+    </div>
+
+    <div class="deploy-step deploy-review" data-review-step>
+      <div class="deploy-step-head"><span class="step-n">3</span><h2>Review</h2></div>
+      <dl class="review-grid">
+        <div><dt>action</dt><dd data-review-mode>select an action</dd></div>
+        <div><dt>theme</dt><dd data-review-theme>select a theme</dd></div>
+      </dl>
+      <div class="deploy-go-actions">
+        <button type="submit" class="primary big" data-submit>Continue</button>
+        <button type="button" class="btn big" data-reset-flow>Clear selection</button>
+      </div>
+      <p class="deploy-hint small">Preview and export use the selected theme. Private notes and research are excluded from public output.</p>
+    </div>
+  </form>
+</section>
+{{end}}

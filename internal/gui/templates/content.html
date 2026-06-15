@@ -1,0 +1,88 @@
+{{define "content_page"}}{{template "base" .}}{{end}}
+{{define "page_title"}}
+<div>
+  <p class="eyebrow">workspace</p>
+  <h1>Content</h1>
+</div>
+{{end}}
+{{define "page_actions"}}
+<a class="btn primary" href="/editor">+ new draft</a>
+<a class="btn" href="/deploy">preview / export</a>
+{{end}}
+{{define "content"}}
+<section class="page-shell content-shell">
+  {{template "page_header" .}}
+
+    <div class="content-stats" role="group" aria-label="library overview">
+    <a class="stat-card" href="/content"><span class="stat-n">{{.Data.Stats.All}}</span><span class="stat-l">all documents</span></a>
+    <a class="stat-card" href="/content?type=post"><span class="stat-n">{{.Data.Stats.LivePosts}}</span><span class="stat-l">posts</span></a>
+    <a class="stat-card" href="/content?type=draft"><span class="stat-n">{{.Data.Stats.Drafts}}</span><span class="stat-l">drafts</span></a>
+    <a class="stat-card" href="/content?type=note"><span class="stat-n">{{.Data.Stats.Private}}</span><span class="stat-l">notes</span></a>
+  </div>
+
+    <form class="content-controls" method="GET" action="/content" role="search">
+    <div class="content-search">
+      <input id="content-search" type="search" name="q" placeholder="search title, body, tags…"
+        aria-label="search content" value="{{.Data.InitialQ}}" autocomplete="off">
+      {{if .Data.InitialQ}}<a class="content-clear" href="/content" aria-label="clear search">clear</a>{{end}}
+    </div>
+
+    <div class="content-filterbar">
+      <div class="content-filter-left">
+        <div class="filters type-filters" role="group" aria-label="filter by type">
+        {{range .Data.TypeFilters}}
+        <button type="submit" class="filter-pill {{if .Active}}active{{end}}" data-type="{{.Value}}" name="type" value="{{.Value}}" aria-pressed="{{if .Active}}true{{else}}false{{end}}">{{.Label}}</button>
+        {{end}}
+        </div>
+      </div>
+      <div class="content-filter-right">
+        <div class="content-sort">
+        <label class="sr-only" for="content-sort-select">sort</label>
+        <select id="content-sort-select" name="sort" aria-label="sort order">
+          <option value="relevance" {{if eq .Data.Sort "relevance"}}selected{{end}}{{if not .Data.Searching}} disabled{{end}}>relevance</option>
+          <option value="modified-desc" {{if eq .Data.Sort "modified-desc"}}selected{{end}}>modified: newest first</option>
+          <option value="modified-asc" {{if eq .Data.Sort "modified-asc"}}selected{{end}}>modified: oldest first</option>
+          <option value="title-asc" {{if eq .Data.Sort "title-asc"}}selected{{end}}>title: a–z</option>
+          <option value="title-desc" {{if eq .Data.Sort "title-desc"}}selected{{end}}>title: z–a</option>
+        </select>
+        </div>
+        <a class="content-clear-filters" href="/content">clear filters</a>
+      </div>
+      <input type="hidden" name="type" id="content-type-field" value="{{.Data.ActiveType}}">
+      <noscript><button type="submit" class="btn">apply</button></noscript>
+    </div>
+  </form>
+
+  <div class="doc-list content-list" id="content-doc-list" data-page-size="50"
+       data-active-type="{{.Data.ActiveType}}"
+       data-init-sort="{{.Data.Sort}}" data-searching="{{if .Data.Searching}}1{{else}}0{{end}}">
+    {{range .Data.Docs}}
+    <div class="doc-row{{if .Highlight}} doc-row-latest{{end}}" data-slug="{{.Slug}}" data-title="{{.Title}}"
+         data-type="{{.Type}}" data-status="{{.Status}}"  data-publish="{{.PublishKind}}" data-tags="{{range $i, $t := .Tags}}{{if $i}},{{end}}{{$t}}{{end}}">
+      <div class="col-main">
+        <a class="col-title" href="/editor?slug={{.Slug}}&from=/content">{{.Title}}</a>
+        {{if .Snippet}}<span class="col-snippet"></span>{{end}}
+        <span class="col-badges">
+          <span class="type-badge type-{{.Type}}">{{.Type}}</span>
+          <span class="status-pill {{.Status}}">{{.Status}}</span>
+          {{if eq .Status "private"}}<span class="state-badge private">private</span>{{end}}
+        </span>
+        {{if .Tags}}<span class="col-tags">{{range $i, $t := .Tags}}{{if $i}}, {{end}}{{$t}}{{end}}</span>{{end}}
+      </div>
+      <span class="col-modified">{{.Modified}}</span>
+      <span class="row-actions">
+        <a class="row-act act-open" href="/editor?slug={{.Slug}}&from=/content">open</a>
+        {{if eq .PublishKind "publish"}}<button type="button" class="row-act act-publish">publish post</button>
+        {{else if eq .PublishKind "unpublish"}}<button type="button" class="row-act act-unpublish">move to draft</button>
+        {{else}}<span class="row-note" title="open in the Editor to change type and publish">not publishable here</span>{{end}}
+        <button type="button" class="row-act act-duplicate">duplicate as draft</button>
+        <button type="button" class="row-act act-delete">delete</button>
+      </span>
+    </div>
+    {{else}}
+    <div class="empty-state"><div class="empty-mark">▰</div><strong>No documents{{if .Data.InitialQ}} match{{end}}.</strong><span>{{if .Data.InitialQ}}Try a different title, tag, or phrase.{{else}}Create a new draft to get started.{{end}}</span>{{if not .Data.InitialQ}}<a class="btn" href="/editor">+ new draft</a>{{end}}</div>
+    {{end}}
+  </div>
+  <div id="content-pagination" class="pagination" aria-label="document pagination"></div>
+</section>
+{{end}}

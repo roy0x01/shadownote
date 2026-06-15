@@ -1,0 +1,46 @@
+{{define "document_head"}}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{.Title}} · shadownote</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050807'/%3E%3Ctext x='18' y='44' font-size='34' fill='%2322c55e'%3E%E2%96%B0%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script src="/static/js/theme-init.js"></script>
+<link rel="stylesheet" href="/static/css/core/typography.css">
+<link rel="stylesheet" href="/static/css/core/main.css">
+{{if not .Standalone}}<link rel="stylesheet" href="/static/css/components/nav.css">
+<link rel="stylesheet" href="/static/css/components/asset-picker.css">{{end}}
+{{range .Styles}}<link rel="stylesheet" href="/static/css/{{.}}">
+{{end}}
+{{end}}
+
+{{define "primary_nav"}}
+<aside class="side" id="side-nav">
+  <div class="side-bg" aria-hidden="true"></div>
+  <button type="button" class="brand" id="brand-toggle" aria-label="toggle navigation" aria-expanded="true" title="hide navigation"><span class="brand-mark">▰</span><span class="brand-text">shadownote</span></button>
+
+  <nav class="side-nav" aria-label="primary">
+    <a href="/" class="nav-item {{if eq .Nav "dashboard"}}active{{end}}" {{if eq .Nav "dashboard"}}aria-current="page"{{end}}><span class="nav-label">dashboard</span></a>
+    <a href="/content" class="nav-item {{if eq .Nav "content"}}active{{end}}" {{if eq .Nav "content"}}aria-current="page"{{end}}><span class="nav-label">content</span></a>
+    <a href="/assets" class="nav-item {{if eq .Nav "assets"}}active{{end}}" {{if eq .Nav "assets"}}aria-current="page"{{end}}><span class="nav-label">assets</span></a>
+    <a href="/deploy" class="nav-item {{if eq .Nav "deploy"}}active{{end}}" {{if eq .Nav "deploy"}}aria-current="page"{{end}}><span class="nav-label">preview/export</span></a>
+    <a href="/settings" class="nav-item {{if eq .Nav "settings"}}active{{end}}" {{if eq .Nav "settings"}}aria-current="page"{{end}}><span class="nav-label">settings</span></a>
+    <a href="/editor" class="nav-item nav-newdraft" id="nav-newdraft" title="create a new draft"><span class="nav-label">+ new draft</span></a>
+  </nav>
+</aside>
+{{end}}
+
+{{define "workspace_controls"}}
+<div class="workspace-actions" aria-label="workspace controls">
+  <form method="post" action="/logout" class="top-lock-form"><button type="submit" class="workspace-control lock-control" aria-label="lock session" title="lock session"><span aria-hidden="true">▣</span></button></form>
+  <button type="button" class="workspace-control theme-toggle" id="theme-toggle" aria-label="switch to day mode" title="toggle day/night mode"><span class="theme-toggle-orbit" aria-hidden="true"><span class="theme-sun">☀</span><span class="theme-moon">☾</span></span><span class="sr-only theme-toggle-label">night mode</span></button>
+</div>
+{{end}}
+
+{{define "page_header"}}
+<div class="page-header{{if .HeaderClass}} {{.HeaderClass}}{{end}}">
+  {{template "page_title" .}}
+  <div class="page-actions{{if .ActionClass}} {{.ActionClass}}{{end}}">
+    {{template "page_actions" .}}
+  </div>
+</div>
+{{end}}

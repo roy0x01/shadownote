@@ -1,0 +1,1 @@
+(function(){try{var key='shadownote.theme';var theme=localStorage.getItem(key)||'night';theme=theme==='day'?'day':'night';localStorage.setItem(key,theme);document.documentElement.setAttribute('data-theme',theme);}catch(e){document.documentElement.setAttribute('data-theme','night');}})();

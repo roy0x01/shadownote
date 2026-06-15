@@ -1,0 +1,93 @@
+{{define "editor"}}{{template "base" .}}{{end}}
+{{define "page_title"}}
+<div class="editor-title-block">
+  <input id="ed-title" aria-label="document title" placeholder="untitled operation note" value="{{.Data.Title}}">
+</div>
+{{end}}
+{{define "page_actions"}}{{end}}
+{{define "content"}}
+<section class="page-shell editor" data-slug="{{.Data.Slug}}" data-new="{{.Data.IsNew}}" data-from="{{.Data.From}}">
+  {{template "page_header" .}}
+
+    <div class="editor-commandbar">
+    <div class="mode-group" role="group" aria-label="editor view mode">
+      <button id="mode-write" class="mode active" type="button" aria-pressed="true">write</button>
+      <button id="mode-split" class="mode" type="button" aria-pressed="false">split</button>
+      <button id="mode-preview" class="mode" type="button" aria-pressed="false">preview</button>
+      <button id="ed-focus" class="ed-focus-toggle" type="button" aria-pressed="false" aria-label="Toggle focus mode" title="Focus mode (⌘⇧F)"><span class="ed-focus-ico" aria-hidden="true"></span></button>
+    </div>
+    <div class="doc-actions" role="group" aria-label="document actions">
+      <span id="ed-status" class="save-state editor-document-state">ready</span>
+      <button id="ed-save" class="primary" type="button">save</button>
+      <button id="ed-publish" class="strong" type="button" data-type="{{.Data.DocType}}">publish as post</button>
+      <button id="ed-unpublish" type="button"{{if not .Data.IsLive}} hidden{{end}}>move back to draft</button>
+      <a href="/deploy" id="ed-deploy" class="btn btn-muted">preview/export</a>
+      {{if not .Data.IsNew}}<button id="ed-delete" class="danger quiet" type="button">delete</button>{{end}}
+      <a href="/content" id="ed-close" class="btn btn-muted quiet">close</a>
+    </div>
+  </div>
+
+  <div id="ed-marked-msg" class="marked-live-msg" role="status" hidden>
+    <span>Published. Review from the Preview & Export page.</span>
+    <a href="/deploy" class="btn primary" id="ed-marked-deploy-link">Open Preview & Export</a>
+  </div>
+
+    <details class="ed-details" open>
+    <summary class="ed-details-summary">document details</summary>
+    <div class="ed-meta">
+      <label class="field-inline ed-summary-field"><span>summary</span><textarea id="ed-summary" rows="2" placeholder="short professional excerpt for lists and SEO">{{.Data.Summary}}</textarea></label>
+      <label class="field-inline"><span>tags</span><input id="ed-tags" placeholder="research, notes, writeup" value="{{.Data.TagString}}"><small class="ed-hint">comma-separated</small></label>
+      <label class="field-inline"><span>type</span><select id="ed-type">
+        {{range .Data.Types}}
+        <option value="{{.}}" {{if eq . $.Data.DocType}}selected{{end}}>{{.}}</option>
+        {{end}}
+      </select></label>
+      <div class="field-inline ed-path-field"><span>path</span><span class="doc-path" id="ed-path">content/{{.Data.DocDir}}/{{if .Data.Slug}}{{.Data.Slug}}{{else}}new-document{{end}}.md</span></div>
+      {{if .Data.IsNew}}
+      <label class="field-inline"><span>template</span><select id="ed-template" data-default="{{.Data.DefaultTemplate}}">
+        <option value="">blank</option>
+        {{range .Data.Templates}}
+        <option value="{{.Name}}" {{if eq .Name $.Data.DefaultTemplate}}selected{{end}}>{{.Description}}</option>
+        {{end}}
+      </select></label>
+      {{end}}
+    </div>
+  </details>
+
+    <div class="ed-toolbar" role="toolbar" aria-label="editor tools">
+    <div class="editor-toolbar-group" aria-label="markdown formatting">
+      <button type="button" class="tbtn" data-md="bold" aria-label="Bold" title="Bold"><b>B</b></button>
+      <button type="button" class="tbtn" data-md="italic" aria-label="Italic" title="Italic"><i>I</i></button>
+      <button type="button" class="tbtn" data-md="code" aria-label="Inline code" title="Inline code">&lt;/&gt;</button>
+      <button type="button" class="tbtn" data-md="link" aria-label="Insert link" title="Insert link">🔗</button>
+      <button type="button" class="tbtn" data-md="h2" aria-label="Heading" title="Heading">H2</button>
+      <button type="button" class="tbtn" data-md="list" aria-label="Bulleted list" title="Bulleted list">•</button>
+      <button type="button" class="tbtn" data-md="quote" aria-label="Block quote" title="Block quote">❝</button>
+      <button type="button" class="tbtn" id="asset-insert" aria-label="Insert asset" title="Insert asset">Asset</button>
+      <a class="tbtn tbtn-link" href="/assets" target="_blank" aria-label="Open Assets page" title="Open Assets page">↗</a>
+    </div>
+  </div>
+
+
+  <div class="ed-body write-mode">
+    <textarea id="ed-text" aria-label="markdown body" spellcheck="false" placeholder="write markdown…">{{.Data.Body}}</textarea>
+    <div id="ed-preview" class="ed-preview"></div>
+  </div>
+
+  {{if not .Data.IsNew}}
+  <details class="version-panel">
+    <summary>document history</summary>
+    <div id="version-list" class="version-list" data-slug="{{.Data.Slug}}">loading versions…</div>
+  </details>
+  {{end}}
+
+  <div class="ed-foot">
+    <span id="ed-wc">0 words</span>
+    <span id="ed-read">0 min read</span>
+    <span id="ed-pos">ln 1, col 1</span>
+    <span class="spacer"></span>
+    <span id="ed-type-status">draft</span>
+    <span class="kbd">Ctrl+S saves</span>
+  </div>
+</section>
+{{end}}

@@ -1,0 +1,33 @@
+{{define "list"}}{{template "base" .}}{{end}}
+{{define "content"}}
+<div class="post-list">
+  {{range .Posts}}
+  <article class="post-item">
+    <a class="post-card-link" href="{{$.Site.BaseURL}}{{.URL}}" aria-label="Read {{.Title}}"></a>
+    <div class="post-meta">
+      <time datetime="{{.Date.Format "2006-01-02"}}">{{.DateString}}</time>
+      {{if .Tags}}
+      <span class="tags">
+        {{range .Tags}}<a href="{{$.Site.BaseURL}}tags/{{. | urlize}}/" class="tag">#{{.}}</a>{{end}}
+      </span>
+      {{end}}
+    </div>
+    <h2><a href="{{$.Site.BaseURL}}{{.URL}}">{{.Title}}</a></h2>
+    {{if .Summary}}<p class="summary">{{.Summary}}</p>{{end}}
+    <div class="read-more">Read article <span aria-hidden="true">→</span></div>
+  </article>
+  {{else}}
+  <div class="empty-state">
+    <p class="empty-title">No published posts yet.</p>
+    <p class="empty">Publish a markdown document to generate the first static page.</p>
+  </div>
+  {{end}}
+</div>
+{{if .Pager}}
+<nav class="pager" aria-label="Pagination">
+  {{if .Pager.PrevURL}}<a href="{{.Site.BaseURL}}{{.Pager.PrevURL}}" class="prev">← newer</a>{{else}}<span></span>{{end}}
+  <span class="page-info">page {{.Pager.Current}} / {{.Pager.Total}}</span>
+  {{if .Pager.NextURL}}<a href="{{.Site.BaseURL}}{{.Pager.NextURL}}" class="next">older →</a>{{else}}<span></span>{{end}}
+</nav>
+{{end}}
+{{end}}

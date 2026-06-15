@@ -1,0 +1,15 @@
+:root{
+  --font-ui:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+  --font-heading:var(--font-ui);
+  --font-body:var(--font-ui);
+  --font-code:var(--font-ui);
+  --font:var(--font-ui);
+  --weight-regular:400;
+  --weight-medium:500;
+  --weight-semibold:500;
+}
+
+html,body,button,input,select,textarea{font-family:var(--font-ui);font-weight:var(--weight-regular);}
+h1,h2,h3,h4,h5,h6,.page-header h1,.section-title,.panel-title{font-family:var(--font-heading);font-weight:var(--weight-medium);}
+strong,b{font-weight:var(--weight-medium);}
+code,kbd,pre,.kbd{font-family:var(--font-code);font-weight:var(--weight-regular);}

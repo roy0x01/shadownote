@@ -1,0 +1,55 @@
+{{define "assets"}}{{template "base" .}}{{end}}
+{{define "page_title"}}
+<div>
+  <p class="eyebrow">library</p>
+  <h1>Assets</h1>
+</div>
+{{end}}
+{{define "page_actions"}}
+<span id="asset-count" class="save-state">loading…</span>
+{{end}}
+{{define "content"}}
+<section class="page-shell assets-page">
+  {{template "page_header" .}}
+
+
+  {{if or .Data.Uploaded .Data.Failed}}
+  <div class="banner {{if eq .Data.Failed "0"}}ok{{else}}err{{end}}" role="status">{{.Data.Uploaded}} uploaded{{if .Data.Failed}}, {{.Data.Failed}} failed{{end}}</div>
+  {{end}}
+
+    <form id="asset-upload" class="asset-upload-panel" method="POST" action="/assets/upload" enctype="multipart/form-data">
+    <input id="asset-file" class="asset-file-input" type="file" name="file" multiple aria-label="choose files to upload">
+    <div id="asset-dropzone" class="asset-dropzone" role="button" tabindex="0" aria-label="Choose files or drop them here to upload">
+      <div class="drop-mark" aria-hidden="true">▰</div>
+      <div class="drop-copy">
+        <strong>Drop assets here</strong>
+        <p id="asset-picker">or click to choose files</p>
+        <p class="asset-maxsize muted">Max file size: {{.Data.MaxUploadMB}} MB</p>
+      </div>
+      <div class="drop-actions">
+        <button type="submit" class="primary">upload</button>
+      </div>
+    </div>
+    <div id="asset-upload-result" class="asset-upload-result" role="status" aria-live="polite" hidden></div>
+  </form>
+
+  <div class="asset-toolbar">
+    <span id="asset-status" class="save-state">ready</span>
+    <span class="muted">Copy a Markdown snippet or insert a path into a document.</span>
+  </div>
+
+  <div class="content-search asset-search-wrap">
+    <input id="asset-search" type="search" placeholder="search name, type, or usage…" aria-label="search assets" autocomplete="off">
+  </div>
+  <div class="filters asset-type-filters" role="group" aria-label="filter assets by type">
+    <button type="button" class="filter-pill active" data-asset-type="all" aria-pressed="true">all</button>
+    <button type="button" class="filter-pill" data-asset-type="images" aria-pressed="false">images</button>
+    <button type="button" class="filter-pill" data-asset-type="pdfs" aria-pressed="false">pdfs</button>
+    <button type="button" class="filter-pill" data-asset-type="other" aria-pressed="false">other</button>
+    <button type="button" class="filter-pill" data-asset-type="unused" aria-pressed="false">unused</button>
+  </div>
+
+  <div id="asset-grid" class="asset-grid-ui"></div>
+  <div id="asset-pagination" class="pagination" aria-label="asset pagination"></div>
+</section>
+{{end}}

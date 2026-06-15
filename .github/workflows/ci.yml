@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y gcc
+
+      - name: Check formatting
+        run: |
+          files=$(gofmt -l $(find . -name '*.go' -not -path './.git/*'))
+          if [ -n "$files" ]; then
+            echo "$files"
+            exit 1
+          fi
+
+      - name: Download modules
+        run: go mod download
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Staticcheck
+        run: |
+          go install honnef.co/go/tools/cmd/staticcheck@2024.1.1
+          "$(go env GOPATH)/bin/staticcheck" ./...
+
+      - name: Vulnerability scan
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
+          "$(go env GOPATH)/bin/govulncheck" ./...
+
+      - name: Test
+        run: go test ./...
+
+      - name: CSS ownership check
+        run: bash tools/css/check_css_ownership.sh
+
+      - name: Typography check
+        run: bash tools/css/check_typography_weights.sh
+
+      - name: Build
+        run: CGO_ENABLED=1 go build -tags fts5 -trimpath -o shadownote .

@@ -1,0 +1,197 @@
+{{define "settings"}}{{template "base" .}}{{end}}
+{{define "page_title"}}
+<div>
+  <p class="eyebrow">configuration</p>
+  <h1>Settings</h1>
+</div>
+{{end}}
+{{define "page_actions"}}{{end}}
+{{define "content"}}
+<section class="page-shell settings settings-edit" data-active-section="{{if .Data.ActiveSection}}{{.Data.ActiveSection}}{{else}}site{{end}}">
+  {{template "page_header" .}}
+
+  {{if .Data.Saved}}<div class="banner ok" role="status">✓ settings saved</div>{{end}}
+  {{if .Data.FormErr}}<div class="banner err" role="alert">✗ {{.Data.FormErr}}</div>{{end}}
+
+  <div class="settings-tree-layout">
+    <nav class="settings-tree-menu" aria-label="settings sections">
+      <button type="button" data-open-setting="site" aria-current="false">site</button>
+      <button type="button" data-open-setting="author" aria-current="false">author</button>
+      <button type="button" data-open-setting="seo" aria-current="false">seo</button>
+      <button type="button" data-open-setting="writing" aria-current="false">writing</button>
+      <button type="button" data-open-setting="publishing" aria-current="false">publishing</button>
+      <button type="button" data-open-setting="assets" aria-current="false">assets</button>
+      <button type="button" data-open-setting="advanced" aria-current="false">advanced</button>
+    </nav>
+
+    <div class="settings-tree-content">
+
+            <section class="settings-group-block" id="grp-site" data-setting-group="site">
+        <form method="POST" action="/settings" autocomplete="off" class="settings-section-form">
+          <input type="hidden" name="section" value="site">
+          <h2 class="settings-group-label">site</h2>
+          <div class="setting-card">
+            <fieldset class="setting-fields">
+              <legend class="sr-only">site identity</legend>
+              <label><span class="k">title</span><input name="blog.title" value="{{.Data.Cfg.Blog.Title}}" placeholder="ShadowNote"></label>
+              <label><span class="k">author</span><input name="blog.author" value="{{.Data.Cfg.Blog.Author}}" placeholder="Author name"></label>
+              <label class="field-wide"><span class="k">description</span><textarea name="blog.description" rows="2" placeholder="Short site description">{{.Data.Cfg.Blog.Description}}</textarea></label>
+              <label><span class="k">base url</span><input name="blog.base_url" type="url" value="{{.Data.Cfg.Blog.BaseURL}}" placeholder="https://example.com"><small class="hint">used for canonical links, feeds, and sitemaps</small></label>
+              <label><span class="k">posts / page</span><input name="blog.posts_per_page" type="number" min="1" value="{{.Data.Cfg.Blog.PostsPerPage}}"></label>
+              <label><span class="k">logo</span><input name="branding.logo" value="{{.Data.Cfg.Branding.Logo}}" placeholder="/assets/logo.svg"></label>
+              <label><span class="k">favicon</span><input name="branding.favicon" value="{{.Data.Cfg.Branding.Favicon}}" placeholder="/assets/favicon.svg"></label>
+              <label><span class="k">social image</span><input name="branding.social_image" value="{{.Data.Cfg.Branding.SocialImage}}" placeholder="/assets/social-card.png"></label>
+            </fieldset>
+          </div>
+          <div class="setting-formfoot"><button type="submit" class="primary">save site</button></div>
+        </form>
+      </section>
+
+            <section class="settings-group-block" id="grp-author" data-setting-group="author">
+        <form method="POST" action="/settings" autocomplete="off" class="settings-section-form">
+          <input type="hidden" name="section" value="author">
+          <h2 class="settings-group-label">author</h2>
+          <div class="setting-card">
+            <fieldset class="setting-fields">
+              <legend class="sr-only">author profile</legend>
+              <label><span class="k">name</span><input name="author.name" value="{{.Data.Cfg.Author.Name}}" placeholder="Author name"></label>
+              <label><span class="k">professional title</span><input name="author.title" value="{{.Data.Cfg.Author.Title}}" placeholder="Security researcher"></label>
+              <label class="field-wide"><span class="k">bio</span><textarea name="author.bio" rows="2" placeholder="Short professional bio">{{.Data.Cfg.Author.Bio}}</textarea></label>
+              <label><span class="k">avatar</span><input name="author.avatar" value="{{.Data.Cfg.Author.Avatar}}" placeholder="/assets/avatar.png"></label>
+              <label><span class="k">location</span><input name="author.location" value="{{.Data.Cfg.Author.Location}}" placeholder="City, Country"></label>
+              <label><span class="k">website</span><input type="url" name="author.website" value="{{.Data.Cfg.Author.Website}}" placeholder="https://example.com"></label>
+              <label><span class="k">email</span><input type="email" name="author.email" value="{{.Data.Cfg.Author.Email}}" placeholder="name@example.com"></label>
+              <label><span class="k">github</span><span class="social-input"><span class="social-prefix">github.com/</span><input name="author.github" value="{{.Data.Cfg.Author.GitHub}}" placeholder="username"></span></label>
+              <label><span class="k">linkedin</span><span class="social-input"><span class="social-prefix">linkedin.com/in/</span><input name="author.linkedin" value="{{.Data.Cfg.Author.LinkedIn}}" placeholder="username"></span></label>
+              <label><span class="k">x / twitter</span><span class="social-input"><span class="social-prefix">x.com/</span><input name="author.twitter" value="{{.Data.Cfg.Author.Twitter}}" placeholder="username"></span></label>
+            </fieldset>
+          </div>
+          <div class="setting-formfoot"><button type="submit" class="primary">save author</button></div>
+        </form>
+      </section>
+
+            <section class="settings-group-block" id="grp-seo" data-setting-group="seo">
+        <form method="POST" action="/settings" autocomplete="off" class="settings-section-form">
+          <input type="hidden" name="section" value="seo">
+          <h2 class="settings-group-label">seo &amp; social</h2>
+          <div class="setting-card">
+            <div class="seo-preview" aria-label="search result preview">
+              <span class="seo-preview-url" data-seo-url>{{if .Data.Cfg.Meta.Canonical}}{{.Data.Cfg.Meta.Canonical}}{{else}}{{.Data.Cfg.Blog.BaseURL}}{{end}}</span>
+              <span class="seo-preview-title" data-seo-title>{{if .Data.Cfg.Meta.Title}}{{.Data.Cfg.Meta.Title}}{{else}}{{.Data.Cfg.Blog.Title}}{{end}}</span>
+              <span class="seo-preview-desc" data-seo-desc>{{if .Data.Cfg.Meta.Description}}{{.Data.Cfg.Meta.Description}}{{else}}{{.Data.Cfg.Blog.Description}}{{end}}</span>
+            </div>
+            <fieldset class="setting-fields">
+              <legend class="sr-only">seo metadata</legend>
+              <label><span class="k">meta title</span><input name="meta.title" data-seo-input="title" value="{{.Data.Cfg.Meta.Title}}" placeholder="defaults to site title"></label>
+              <label><span class="k">canonical url</span><input name="meta.canonical" type="url" data-seo-input="url" value="{{.Data.Cfg.Meta.Canonical}}" placeholder="https://example.com/"></label>
+              <label class="field-wide"><span class="k">meta description</span><textarea name="meta.description" data-seo-input="desc" rows="2" placeholder="defaults to site description">{{.Data.Cfg.Meta.Description}}</textarea></label>
+              <label class="field-wide"><span class="k">keywords</span><input name="meta.keywords" value="{{.Data.Cfg.Meta.Keywords}}" placeholder="security, engineering, research"><small class="hint">comma-separated</small></label>
+              <div class="field"><span class="k">robots</span>
+                <fieldset class="seg" aria-label="robots policy">
+                  <legend class="sr-only">robots policy</legend>
+                  <label class="seg-opt"><input type="radio" name="meta.robots" value="index,follow" {{if or (eq .Data.Cfg.Meta.Robots "index,follow") (eq .Data.Cfg.Meta.Robots "")}}checked{{end}}><span>index,follow</span></label>
+                  <label class="seg-opt"><input type="radio" name="meta.robots" value="noindex,nofollow" {{if eq .Data.Cfg.Meta.Robots "noindex,nofollow"}}checked{{end}}><span>noindex,nofollow</span></label>
+                </fieldset>
+              </div>
+              <div class="field"><span class="k">twitter card</span>
+                <fieldset class="seg" aria-label="twitter card type">
+                  <legend class="sr-only">twitter card type</legend>
+                  <label class="seg-opt"><input type="radio" name="meta.twitter_card" value="summary_large_image" {{if or (eq .Data.Cfg.Meta.TwitterCard "summary_large_image") (eq .Data.Cfg.Meta.TwitterCard "")}}checked{{end}}><span>large image</span></label>
+                  <label class="seg-opt"><input type="radio" name="meta.twitter_card" value="summary" {{if eq .Data.Cfg.Meta.TwitterCard "summary"}}checked{{end}}><span>summary</span></label>
+                </fieldset>
+              </div>
+            </fieldset>
+          </div>
+          <div class="setting-formfoot"><button type="submit" class="primary">save seo</button></div>
+        </form>
+      </section>
+
+            <section class="settings-group-block" id="grp-writing" data-setting-group="writing">
+        <form method="POST" action="/settings" autocomplete="off" class="settings-section-form">
+          <input type="hidden" name="section" value="writing">
+          <h2 class="settings-group-label">writing</h2>
+          <div class="setting-card">
+            <fieldset class="setting-fields">
+              <legend class="sr-only">writing defaults</legend>
+              <label><span class="k">new-doc template</span><select name="editor.default_template" id="default-template-select">
+                {{range .Data.Templates}}
+                <option value="{{.Name}}" {{if eq .Name $.Data.Cfg.Editor.DefaultTemplate}}selected{{end}}>{{.Description}}</option>
+                {{end}}
+              </select><small class="hint">applied to every new document</small></label>
+              <label class="row-toggle"><span class="k">mermaid diagrams</span><span class="switch"><input name="blog.mermaid" type="checkbox" {{if .Data.Cfg.Blog.Mermaid}}checked{{end}}><span class="switch-track"></span></span></label>
+              <small class="hint field-wide">When enabled, generated public pages load Mermaid from a CDN. Keep this off for fully offline/static output.</small>
+            </fieldset>
+          </div>
+          <div class="setting-formfoot"><button type="submit" class="primary">save writing</button></div>
+        </form>
+      </section>
+
+            <section class="settings-group-block" id="grp-publishing" data-setting-group="publishing">
+        <form method="POST" action="/settings" autocomplete="off" class="settings-section-form">
+          <input type="hidden" name="section" value="publishing">
+          <h2 class="settings-group-label">publishing</h2>
+          <p class="settings-help">Publishing settings are intentionally minimal. Choose preview or export on the Preview & Export page; keep only the local preview port here.</p>
+
+          <div class="setting-card">
+            <h3 class="card-title">local preview</h3>
+            <fieldset class="setting-fields">
+              <legend class="sr-only">local preview</legend>
+              <label><span class="k">port</span><input name="deployment.localhost.port" type="number" min="1" max="65535" value="{{.Data.Cfg.Deployment.Localhost.Port}}"></label>
+            </fieldset>
+          </div>
+
+          <div class="setting-formfoot"><button type="submit" class="primary">save publishing</button></div>
+        </form>
+      </section>
+
+            <section class="settings-group-block" id="grp-assets" data-setting-group="assets">
+        <form method="POST" action="/settings" autocomplete="off" class="settings-section-form">
+          <input type="hidden" name="section" value="assets">
+          <h2 class="settings-group-label">assets</h2>
+          <div class="setting-card">
+            <fieldset class="setting-fields">
+              <legend class="sr-only">assets</legend>
+              <label><span class="k">directory</span><input name="assets.directory" value="{{.Data.Cfg.Assets.Directory}}" placeholder="~/.shadownote/assets"></label>
+              <label class="row-toggle"><span class="k">inline small images (base64)</span><span class="switch"><input name="assets.inline_base64" type="checkbox" data-assets-inline {{if .Data.Cfg.Assets.InlineBase64}}checked{{end}}><span class="switch-track"></span></span></label>
+              <label data-flow="assets-inline"><span class="k">inline max kb</span><input name="assets.max_inline_kb" type="number" min="1" value="{{.Data.Cfg.Assets.MaxInlineKB}}"></label>
+            </fieldset>
+            <p class="settings-help">Manage individual files on the <a href="/assets" class="cyan-link">Assets</a> page.</p>
+          </div>
+          <div class="setting-formfoot"><button type="submit" class="primary">save assets</button></div>
+        </form>
+      </section>
+
+            <section class="settings-group-block" id="grp-advanced" data-setting-group="advanced">
+        <form method="POST" action="/settings" autocomplete="off" class="settings-section-form">
+          <input type="hidden" name="section" value="advanced">
+          <h2 class="settings-group-label">advanced</h2>
+          <div class="setting-card">
+            <h3 class="card-title">paths</h3>
+            <fieldset class="setting-fields">
+              <legend class="sr-only">paths</legend>
+              <label><span class="k">content</span><input name="paths.content" value="{{.Data.Cfg.Paths.Content}}" placeholder="~/.shadownote/content"></label>
+              <label><span class="k">public</span><input name="paths.public" value="{{.Data.Cfg.Paths.Public}}" placeholder="~/.shadownote/public"></label>
+              <label class="field-wide"><span class="k">database</span><input name="paths.db" value="{{.Data.Cfg.Paths.DB}}" readonly aria-readonly="true"><small class="hint">fixed at startup — set the SHADOWNOTE_DB environment variable to change it</small></label>
+            </fieldset>
+          </div>
+          <div class="setting-card">
+            <h3 class="card-title">logging</h3>
+            <fieldset class="setting-fields">
+              <legend class="sr-only">logging</legend>
+              <label><span class="k">level</span><select name="logging.level">
+                <option value="debug" {{if eq .Data.Cfg.Logging.Level "debug"}}selected{{end}}>debug</option>
+                <option value="info" {{if eq .Data.Cfg.Logging.Level "info"}}selected{{end}}>info</option>
+                <option value="warn" {{if eq .Data.Cfg.Logging.Level "warn"}}selected{{end}}>warn</option>
+                <option value="error" {{if eq .Data.Cfg.Logging.Level "error"}}selected{{end}}>error</option>
+              </select></label>
+              <label><span class="k">file</span><input name="logging.file" value="{{.Data.Cfg.Logging.File}}" placeholder="empty = stderr"></label>
+            </fieldset>
+          </div>
+          <div class="setting-formfoot"><button type="submit" class="primary">save advanced</button></div>
+        </form>
+      </section>
+
+    </div>
+  </div>
+</section>
+{{end}}

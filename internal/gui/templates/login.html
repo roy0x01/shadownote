@@ -1,0 +1,41 @@
+{{define "login"}}<!DOCTYPE html>
+<html lang="en">
+<head>
+{{template "document_head" .}}
+</head>
+<body class="login-body">
+<button type="button" class="login-theme-toggle theme-toggle" id="theme-toggle" aria-label="switch to day mode" title="toggle day/night mode">
+  <span class="theme-toggle-orbit" aria-hidden="true"><span class="theme-sun">☀</span><span class="theme-moon">☾</span></span>
+  <span class="sr-only theme-toggle-label">night mode</span>
+</button>
+<main class="login-stage" aria-label="ShadowNote login">
+  <section class="login-card" aria-labelledby="login-title">
+    <div class="login-brand">
+      <div class="login-root" aria-hidden="true">▰</div>
+      <h1 id="login-title">ShadowNote</h1>
+    </div>
+
+    <div class="login-card-head">
+      <h2>{{if .Data.Setup}}Set password{{else}}Sign in{{end}}</h2>
+      <p>{{if .Data.Setup}}Create the dashboard password for this local database.{{else}}Enter your dashboard password.{{end}}</p>
+    </div>
+
+    <form method="post" action="/login" class="login-form">
+      <label class="login-field">
+        <span>password</span>
+        <input type="password" name="password" placeholder="enter password" autofocus autocomplete="{{if .Data.Setup}}new-password{{else}}current-password{{end}}">
+      </label>
+      {{if .Data.Setup}}
+      <label class="login-field">
+        <span>confirm password</span>
+        <input type="password" name="confirm_password" placeholder="confirm password" autocomplete="new-password">
+      </label>
+      {{end}}
+      <button type="submit" class="primary login-submit">{{if .Data.Setup}}save password{{else}}open dashboard{{end}}</button>
+      {{if .Error}}<div class="login-error" role="alert">{{.Error}}</div>{{end}}
+    </form>
+  </section>
+</main>
+{{if .Script}}<script src="/static/js/{{.Script}}"></script>{{end}}
+</body>
+</html>{{end}}

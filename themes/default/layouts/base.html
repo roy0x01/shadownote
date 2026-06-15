@@ -1,0 +1,58 @@
+{{define "base"}}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{{if .Description}}{{.Description}}{{else if .Site.Meta.Description}}{{.Site.Meta.Description}}{{else}}{{.Site.Description}}{{end}}">
+{{if .Site.Meta.Keywords}}<meta name="keywords" content="{{.Site.Meta.Keywords}}">{{end}}
+{{if .Site.Meta.Robots}}<meta name="robots" content="{{.Site.Meta.Robots}}">{{end}}
+<meta property="og:type" content="{{if .IsHome}}website{{else}}article{{end}}">
+<meta property="og:title" content="{{if .IsHome}}{{if .Site.Meta.Title}}{{.Site.Meta.Title}}{{else}}{{.Site.Title}}{{end}}{{else}}{{.Title}} · {{.Site.Title}}{{end}}">
+<meta property="og:description" content="{{if .Description}}{{.Description}}{{else if .Site.Meta.Description}}{{.Site.Meta.Description}}{{else}}{{.Site.Description}}{{end}}">
+{{if .Site.Meta.Image}}<meta property="og:image" content="{{.Site.Meta.Image}}">{{end}}
+<meta name="twitter:card" content="{{if .Site.Meta.TwitterCard}}{{.Site.Meta.TwitterCard}}{{else}}summary_large_image{{end}}">
+{{if .Site.Meta.Image}}<meta name="twitter:image" content="{{.Site.Meta.Image}}">{{end}}
+{{if .Site.Favicon}}<link rel="icon" href="{{.Site.Favicon}}">{{end}}
+{{if .Site.Meta.Canonical}}<link rel="canonical" href="{{.Site.Meta.Canonical}}">{{end}}
+<title>{{if .IsHome}}{{if .Site.Meta.Title}}{{.Site.Meta.Title}}{{else}}{{.Site.Title}}{{end}}{{else}}{{.Title}} · {{.Site.Title}}{{end}}</title>
+<link rel="stylesheet" href="{{.Site.BaseURL}}css/blog.css">
+<link rel="alternate" type="application/rss+xml" title="{{.Site.Title}}" href="{{.Site.BaseURL}}index.xml">
+</head>
+<body>
+<a class="skip-link" href="#content">skip to content</a>
+<div class="site-shell">
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="{{.Site.BaseURL}}" class="brand" aria-label="{{.Site.Title}} home">
+        {{if .Site.Logo}}<img class="brand-logo" src="{{.Site.Logo}}" alt="" loading="lazy">{{else}}<span class="brand-mark" aria-hidden="true">▣</span>{{end}}
+        <span class="brand-copy">
+          <span class="site-title">{{.Site.Title}}</span>
+          {{if .Site.Description}}<span class="site-description">{{.Site.Description}}</span>{{end}}
+        </span>
+      </a>
+      <div class="links">
+        <a href="{{.Site.BaseURL}}">posts</a>
+        <a href="{{.Site.BaseURL}}tags/">tags</a>
+        <a href="{{.Site.BaseURL}}author/">author</a>
+        <a href="{{.Site.BaseURL}}index.xml" class="rss">rss</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="content" class="container">
+    {{template "content" .}}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>{{if .Site.Author}}{{.Site.Author}}{{else}}{{.Site.Title}}{{end}}</span>
+      <span class="sep">/</span>
+      <a href="{{.Site.BaseURL}}index.xml">feed</a>
+      <span class="footer-line"></span>
+      <span>Published with <a href="https://github.com/roy0x01/shadownote" target="_blank" rel="noopener noreferrer">ShadowNote</a></span>
+    </div>
+  </footer>
+</div>
+{{.Mermaid}}
+</body>
+</html>{{end}}

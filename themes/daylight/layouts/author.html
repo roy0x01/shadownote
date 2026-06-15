@@ -1,0 +1,21 @@
+{{define "content"}}
+<section class="author-page">
+  <div class="author-card">
+    {{if .Profile.Avatar}}<img class="author-avatar" src="{{.Profile.Avatar}}" alt="{{.Profile.Name}}" loading="lazy">{{end}}
+    <div>
+      <p class="eyebrow">Author</p>
+      <h1>{{if .Profile.Name}}{{.Profile.Name}}{{else}}{{.Site.Author}}{{end}}</h1>
+      {{if .Profile.Title}}<p class="author-title">{{.Profile.Title}}</p>{{end}}
+      {{if .Profile.Bio}}<p class="author-bio">{{.Profile.Bio}}</p>{{end}}
+      <div class="author-links">
+        {{if .Profile.Location}}<span class="author-loc"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1a5 5 0 0 0-5 5c0 3.5 5 9 5 9s5-5.5 5-9a5 5 0 0 0-5-5Zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg>{{.Profile.Location}}</span>{{end}}
+        {{if .Profile.Website}}<a class="social-ico" href="{{socialURL "website" .Profile.Website}}" rel="me noopener" aria-label="website" title="website"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0Zm5.9 5h-2.3a12 12 0 0 0-1-2.6A6 6 0 0 1 13.9 5ZM8 2c.6.8 1.1 1.8 1.4 3H6.6C6.9 3.8 7.4 2.8 8 2ZM2.3 10A6 6 0 0 1 2 8c0-.7.1-1.4.3-2h2.5a14 14 0 0 0 0 4H2.3Zm.8 1h2.3c.3 1 .6 1.9 1 2.6A6 6 0 0 1 3.1 11Zm2.3-6H3.1a6 6 0 0 1 3.3-2.6c-.4.7-.7 1.6-1 2.6ZM8 14c-.6-.8-1.1-1.8-1.4-3h2.8C9.1 12.2 8.6 13.2 8 14Zm1.6-4H6.4a12 12 0 0 1 0-4h3.2a12 12 0 0 1 0 4Zm.4 3.6c.4-.7.7-1.6 1-2.6h2.3a6 6 0 0 1-3.3 2.6ZM11.2 10a14 14 0 0 0 0-4h2.5c.2.6.3 1.3.3 2s-.1 1.4-.3 2h-2.5Z"/></svg></a>{{end}}
+        {{if .Profile.Email}}<a class="social-ico" href="mailto:{{.Profile.Email}}" aria-label="email" title="email"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M2 3h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm0 2v.4l6 3.6 6-3.6V5H2Zm12 6V7l-6 3.6L2 7v4h12Z"/></svg></a>{{end}}
+        {{if .Profile.GitHub}}<a class="social-ico" href="{{socialURL "github" .Profile.GitHub}}" rel="me noopener" aria-label="github" title="github"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2 .4-2.5-.5-2.7-1-.1-.3-.6-1-1-1.2-.3-.2-.8-.6 0-.6.7 0 1.2.7 1.4 1 .8 1.3 2 1 2.5.7.1-.6.3-1 .6-1.2-2-.2-3.7-1-3.7-4.3 0-1 .3-1.7.9-2.4-.1-.2-.4-1 .1-2.2 0 0 .7-.2 2.3.9a8 8 0 0 1 4.2 0c1.6-1.1 2.3-.9 2.3-.9.5 1.2.2 2 .1 2.2.6.7.9 1.5.9 2.4 0 3.4-2 4.1-4 4.3.4.3.6.8.6 1.6v2.3c0 .2.2.5.6.4A8 8 0 0 0 8 0Z"/></svg></a>{{end}}
+        {{if .Profile.LinkedIn}}<a class="social-ico" href="{{socialURL "linkedin" .Profile.LinkedIn}}" rel="me noopener" aria-label="linkedin" title="linkedin"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M3.4 1.3a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4ZM1.9 6h3v8h-3V6Zm5 0h2.9v1.1h.1c.4-.7 1.4-1.4 2.8-1.4 3 0 3.5 2 3.5 4.5V14h-3v-3.4c0-.8 0-1.9-1.1-1.9-1.2 0-1.3.9-1.3 1.8V14h-3V6Z"/></svg></a>{{end}}
+        {{if .Profile.Twitter}}<a class="social-ico" href="{{socialURL "twitter" .Profile.Twitter}}" rel="me noopener" aria-label="x / twitter" title="x / twitter"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M9.5 6.8 15 .5h-1.3L8.9 6 5 .5H.5l5.8 8.3L.5 15.5h1.3l5-5.8 4 5.8H15L9.5 6.8Zm-1.8 2-.6-.8L2.3 1.5h2l3.7 5.3.6.8 4.9 7h-2l-3.8-5.6Z"/></svg></a>{{end}}
+      </div>
+    </div>
+  </div>
+</section>
+{{end}}
