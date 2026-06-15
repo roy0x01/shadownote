@@ -8,7 +8,6 @@
 
 <p align="center">
   <a href="https://github.com/roy0x01/shadownote/actions/workflows/ci.yml"><img src="https://github.com/roy0x01/shadownote/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
-  <a href="https://github.com/roy0x01/shadownote/releases/latest"><img src="https://img.shields.io/github/v/release/roy0x01/shadownote" alt="Release"/></a>
   <img src="https://img.shields.io/badge/go-1.22+-00ADD8?logo=go&logoColor=white" alt="Go 1.22+"/>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="MIT License"/></a>
 </p>
