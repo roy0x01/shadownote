@@ -67,6 +67,7 @@ func TestValidateRejectsAssetsInsidePublic(t *testing.T) {
 
 func TestValidateRejectsPublicInsideContent(t *testing.T) {
 	cfg := Default()
+	cfg.Paths.Content = "content"
 	cfg.Paths.Public = "content/public"
 	if err := cfg.Validate(); err == nil {
 		t.Fatal("expected public-inside-content validation error")
