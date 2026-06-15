@@ -29,9 +29,9 @@ It runs as a local dashboard on `127.0.0.1:3000`. Content is plain Markdown on d
 
 ## Screenshots
 
-![Dashboard screenshot placeholder](docs/images/dashboard.svg)
+![Dashboard screenshot placeholder](docs/images/dashboard.png)
 
-![Editor screenshot placeholder](docs/images/editor.svg)
+![Preview & Export screenshot placeholder](docs/images/deploy.png)
 
 ---
 
