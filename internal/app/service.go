@@ -213,26 +213,6 @@ func (s *Service) Reindex() error {
 	return s.index.Rebuild()
 }
 
-func parseStoreTime(v string) (time.Time, bool) {
-	v = strings.TrimSpace(v)
-	if v == "" {
-		return time.Time{}, false
-	}
-	layouts := []string{
-		time.RFC3339Nano,
-		time.RFC3339,
-		"2006-01-02 15:04:05",
-		"2006-01-02T15:04:05",
-		"2006-01-02",
-	}
-	for _, l := range layouts {
-		if t, err := time.Parse(l, v); err == nil {
-			return t, true
-		}
-	}
-	return time.Time{}, false
-}
-
 func (s *Service) RenderHTML(doc *content.Document) (string, error) {
 	return s.render.RenderString(doc.Body)
 }
