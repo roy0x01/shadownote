@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/go-1.22+-00ADD8?logo=go&logoColor=white" alt="Go 1.22+"/>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="MIT License"/></a>
 </p>
+
 ---
 
 ShadowNote is a local Markdown publishing tool for drafting, previewing, and exporting a static site from a browser dashboard. It can also be used as a research and note-taking workspace for drafts, notes, and reference material that may never be published. It keeps the workflow simple: write locally, manage notes and assets, preview themes, and export or deploy the static site when the content is ready.
