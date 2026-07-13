@@ -4,7 +4,7 @@ go 1.25
 
 require (
 	github.com/alecthomas/chroma/v2 v2.27.0
-	github.com/mattn/go-sqlite3 v1.14.47
+	github.com/mattn/go-sqlite3 v1.14.48
 	github.com/yuin/goldmark v1.7.1
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc
 	gopkg.in/yaml.v3 v3.0.1
